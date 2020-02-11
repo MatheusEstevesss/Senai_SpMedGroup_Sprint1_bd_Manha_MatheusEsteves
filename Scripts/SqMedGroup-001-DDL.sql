@@ -1,0 +1,81 @@
+CREATE DATABASE SpMedGroup;
+
+use SpMedGroup;
+
+CREATE TABLE Clinicas (
+		IdClinica	INT PRIMARY KEY IDENTITY
+		,RazaoSocial	VARCHAR(255) NOT NULL
+		,CNPJ		CHAR(14) NOT NULL UNIQUE
+		,NomeFantasia	VARCHAR(255) NOT NULL
+		,HorarioFuncionamento	VARCHAR(200)
+		,IdEndereco	INT FOREIGN KEY REFERENCES Enderecos (IdEndereco)
+);
+GO 
+
+CREATE TABLE Situacao (
+	IdSituacao	INT PRIMARY KEY IDENTITY
+	,Titulo		VARCHAR(255) NOT NULL
+);
+GO 
+
+CREATE TABLE Especialidades(
+	IdEspecialidade	INT PRIMARY KEY IDENTITY
+	,NomeEspecialidade	VARCHAR(255)
+);
+GO 
+
+CREATE TABLE Enderecos(
+	IdEndereco	INT PRIMARY KEY IDENTITY
+	,Rua		VARCHAR(255) NOT NULL
+	,Bairro		VARCHAR(255) NOT NULL
+	,Estado		VARCHAR(255) NOT NULL
+	,Numero		INT NOT NULL
+	,CEP		CHAR(8)
+);
+GO
+
+CREATE TABLE TipoUsuario(
+	IdTipoUsuario	INT PRIMARY KEY IDENTITY
+	,Titulo			VARCHAR(255) NOT NULL
+);
+GO
+
+CREATE TABLE Usuarios(
+	IdUsuario	INT PRIMARY KEY IDENTITY
+	,Email		VARCHAR(255) NOT NULL UNIQUE
+	,Senha		VARCHAR(255) NOT NULL
+	,IdTipoUsuario	INT FOREIGN KEY REFERENCES TipoUsuario (IdTipoUsuario)
+);
+GO
+
+CREATE TABLE Medicos(
+	IdMedico	INT PRIMARY KEY IDENTITY
+	,NomeMedico	VARCHAR(255) NOT NULL
+	,CRM		CHAR(7) NOT NULL UNIQUE
+	,IdClinica	INT FOREIGN KEY REFERENCES Clinicas (IdClinica)
+	,IdUsuario	INT FOREIGN KEY REFERENCES Usuarios (IdUsuario)
+	,IdEspecialidade	INT FOREIGN KEY REFERENCES Especialidades (IdEspecialidade)
+);
+GO 
+
+CREATE TABLE Prontuarios(
+	IdProntuario	INT PRIMARY KEY IDENTITY
+	,NomePaciente	VARCHAR(255) NOT NULL
+	,DataNascimento	DATE NOT NULL
+	,TeleFone		VARCHAR(11) NOT NULL
+	,RG				CHAR(9)  NOT NULL UNIQUE
+	,CPF			CHAR(11) NOT NULL UNIQUE
+	,IdUsuario		INT FOREIGN KEY REFERENCES Usuarios (IdUsuario)
+	,IdEndereço		INT FOREIGN KEY REFERENCES Enderecos (IdEndereco)
+);
+GO
+
+CREATE TABLE Consultas(
+	IdConsulta	INT PRIMARY KEY IDENTITY
+	,DataConsulta	DATETIME NOT NULL  
+	,Descricao	VARCHAR(255)
+	,IdSituacao	INT FOREIGN KEY REFERENCES Situacao (IdSituacao)
+	,IdProntuario INT FOREIGN KEY REFERENCES Prontuarios (IdProntuario)
+	,IdMedico	INT FOREIGN KEY REFERENCES Medicos (IdMedico)
+);
+GO
