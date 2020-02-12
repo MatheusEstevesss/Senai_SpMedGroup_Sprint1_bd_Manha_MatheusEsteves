@@ -24,3 +24,8 @@ INNER JOIN Enderecos ON Clinicas.IdEndereco = Enderecos.IdEndereco;
 SELECT * FROM Usuarios;
 SELECT Usuarios.IdUsuario,Usuarios.Email,Usuarios.Senha,TipoUsuario.Titulo as TipoUsuario FROM Usuarios
 INNER JOIN TipoUsuario ON Usuarios.IdTipoUsuario = TipoUsuario.IdTipoUsuario;
+
+SELECT COUNT (IdMedico)
+FROM Medicos
+WHERE IdEspecialidade=17;
+
